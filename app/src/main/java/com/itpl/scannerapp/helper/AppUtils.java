@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.util.SparseArray;
 import android.widget.Toast;
@@ -74,17 +75,6 @@ public class AppUtils {
 
     public static String size(File file) {
         int size = (int) file.length();
-        Date lastModDate = new Date(file.lastModified());
-        String str_date=lastModDate.toString();
-        Date localTime = null;
-        try {
-            localTime = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss ", Locale.getDefault()).parse(str_date);
-            str_date = String.valueOf(localTime.getTime());
-        } catch (java.text.ParseException e) {
-            e.printStackTrace();
-        }
-
-
         DecimalFormat df = new DecimalFormat("0.00");
 
         float sizeKb = 1024.0f;
@@ -92,18 +82,53 @@ public class AppUtils {
         float sizeGb = sizeMb * sizeKb;
         float sizeTerra = sizeGb * sizeKb;
 
-
         if (size < sizeMb) {
-            return df.format(size / sizeKb) + " Kb "+ str_date;
+            return df.format(size / sizeKb) + " Kb";
         }
         else if (size < sizeGb) {
-            return df.format(size / sizeMb) + " Mb "+ str_date;
+            return df.format(size / sizeMb) + " Mb";
         }
         else if (size < sizeTerra) {
-            return df.format(size / sizeGb) + " Gb "+ str_date;
+            return df.format(size / sizeGb) + " Gb";
         }
 
         return "Error to get size";
+    }
+
+    public static String getTime(File file){
+        Date lastModDate = new Date(file.lastModified());
+        String str_date=lastModDate.toString();
+
+        SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+        Date newDate = null;
+        try {
+            newDate = format.parse(str_date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        format = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+        return format.format(newDate);
+
+    }
+
+    public static void shareFile(String path, String message, Context context){
+        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+        Uri screenshotUri = Uri.parse(path);
+        sharingIntent.setType("*/*");
+        sharingIntent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
+        context.startActivity(Intent.createChooser(sharingIntent, message));
+    }
+
+    public static void openWith(Context context, File file) {
+        Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", file);
+        String mime = context.getContentResolver().getType(uri);
+
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setDataAndType(uri, mime);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        context.startActivity(intent);
     }
 
 }
