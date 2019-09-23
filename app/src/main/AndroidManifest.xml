@@ -14,7 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.PdfViewActivity"></activity>
+        <activity android:name=".barcode.activity.BarCodeScanActivity"></activity>
+        <activity
+            android:name=".activity.PdfViewActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.HomeActivity"
             android:screenOrientation="portrait">
@@ -30,8 +33,12 @@
         <!-- android:value="ocr"/> -->
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
-            android:value="ocr" />
-
+            android:value="ocr|barcode" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" /> <!-- <meta-data -->
+        <!-- android:name="com.google.firebase.ml.vision.DEPENDENCIES" -->
+        <!-- android:value="barcode" /> -->
         <activity
             android:name=".activity.CameraActivity"
             android:screenOrientation="portrait" />
@@ -45,6 +52,10 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <activity
+            android:name=".barcode.activity.BarcodeCaptureActivity"
+            android:label="Read Barcode" />
     </application>
 
 </manifest>

@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.itpl.scannerapp.R;
 import com.itpl.scannerapp.adapter.FilesAdapter;
+import com.itpl.scannerapp.barcode.activity.BarCodeScanActivity;
 import com.itpl.scannerapp.helper.AppUtils;
 
 import java.io.File;
@@ -95,5 +96,9 @@ public class HomeActivity extends AppCompatActivity {
             Collections.reverse(fileList);
             rvFiles.setAdapter(new FilesAdapter(this, fileList));
         }
+    }
+
+    public void scanCode(View view) {
+        startActivity(new Intent(this, BarCodeScanActivity.class));
     }
 }

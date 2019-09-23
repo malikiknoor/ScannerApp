@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
 import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
+import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.itpl.scannerapp.R;
 import com.itpl.scannerapp.helper.AppUtils;
 
@@ -107,6 +108,7 @@ public class PdfViewActivity extends AppCompatActivity implements OnPageChangeLi
                         dialog.dismiss();
                         file.delete();
                         Toast.makeText(PdfViewActivity.this, "File deleted successfully.", Toast.LENGTH_SHORT).show();
+                        finish();
                     }
                 });
 
