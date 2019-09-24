@@ -85,6 +85,9 @@ public class BarCodeScanActivity extends AppCompatActivity implements View.OnCli
             case 4:
                 Toast.makeText(this, "Phone", Toast.LENGTH_SHORT).show();
                 break;
+            case 5:
+                Toast.makeText(this, "This is bar code", Toast.LENGTH_SHORT).show();
+                break;
             case 6:
                 Toast.makeText(this, "SMS", Toast.LENGTH_SHORT).show();
                 break;
