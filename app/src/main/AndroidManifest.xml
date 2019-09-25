@@ -5,6 +5,9 @@
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.SEND_SMS"/>
+
 
     <application
         android:allowBackup="true"
@@ -14,7 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".barcode.activity.BarCodeScanActivity"></activity>
+        <activity android:name=".activity.SelectedImageViewActivity"/>
+        <activity android:name=".barcode.activity.BarCodeScanActivity" />
         <activity
             android:name=".activity.PdfViewActivity"
             android:screenOrientation="portrait" />
@@ -37,8 +41,7 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" /> <!-- <meta-data -->
-        <!-- android:name="com.google.firebase.ml.vision.DEPENDENCIES" -->
-        <!-- android:value="barcode" /> -->
+
         <activity
             android:name=".activity.CameraActivity"
             android:screenOrientation="portrait" />

@@ -33,6 +33,9 @@ import com.itpl.scannerapp.R;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import static com.itpl.scannerapp.helper.AppUtils.openSettingMesseage;
+
 public class TextShowActivity extends AppCompatActivity {
 
     private TextView tv_result;
@@ -89,7 +92,7 @@ public class TextShowActivity extends AppCompatActivity {
                 if(grantResults[0]== PackageManager.PERMISSION_GRANTED){
                     createandDisplayPdf();
                 }else{
-                    Toast.makeText(this, "You Have to agree the permisson to do this task", Toast.LENGTH_SHORT).show();
+                    openSettingMesseage(this);
                 }
                 break;
 
@@ -97,7 +100,7 @@ public class TextShowActivity extends AppCompatActivity {
                 if(grantResults[0]== PackageManager.PERMISSION_GRANTED){
                     createandDisplayPdf();
                 }else{
-                    Toast.makeText(this, "You Have to agree the permisson to do this task", Toast.LENGTH_SHORT).show();
+                    openSettingMesseage(this);
                 }
                 break;
         }

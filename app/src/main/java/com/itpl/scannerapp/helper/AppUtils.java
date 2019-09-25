@@ -1,16 +1,15 @@
 package com.itpl.scannerapp.helper;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Environment;
+import android.provider.Settings;
 import android.support.v4.content.FileProvider;
-import android.util.Log;
 import android.util.SparseArray;
-import android.widget.Toast;
 
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.text.TextBlock;
@@ -18,7 +17,6 @@ import com.google.android.gms.vision.text.TextRecognizer;
 import com.itpl.scannerapp.activity.TextShowActivity;
 
 import java.io.File;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -53,22 +51,17 @@ public class AppUtils {
         }
     }
 
-    public static void viewPdf(Context context, File file) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.fromFile(file), "application/pdf");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-        context.startActivity(intent);
-    }
-
     public static ArrayList<File> getListFiles(File parentDir) {
         ArrayList<File> inFiles = new ArrayList<File>();
         File[] files = parentDir.listFiles();
+        if (files != null) {
             for (File file : files) {
                 if (file.isDirectory()) {
                     inFiles.addAll(getListFiles(file));
                 } else {
                     inFiles.add(file);
                 }
+            }
         }
         return inFiles;
     }
@@ -84,20 +77,18 @@ public class AppUtils {
 
         if (size < sizeMb) {
             return df.format(size / sizeKb) + " Kb";
-        }
-        else if (size < sizeGb) {
+        } else if (size < sizeGb) {
             return df.format(size / sizeMb) + " Mb";
-        }
-        else if (size < sizeTerra) {
+        } else if (size < sizeTerra) {
             return df.format(size / sizeGb) + " Gb";
         }
 
         return "Error to get size";
     }
 
-    public static String getTime(File file){
+    public static String getTime(File file) {
         Date lastModDate = new Date(file.lastModified());
-        String str_date=lastModDate.toString();
+        String str_date = lastModDate.toString();
 
         SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
         Date newDate = null;
@@ -112,7 +103,7 @@ public class AppUtils {
 
     }
 
-    public static void shareFile(String path, String message, Context context){
+    public static void shareFile(String path, String message, Context context) {
         Intent sharingIntent = new Intent(Intent.ACTION_SEND);
         Uri screenshotUri = Uri.parse(path);
         sharingIntent.setType("*/*");
@@ -129,6 +120,25 @@ public class AppUtils {
         intent.setDataAndType(uri, mime);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         context.startActivity(intent);
+    }
+
+    public static void openSettingMesseage(final Context context){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Permission Denied");
+        builder.setCancelable(false);
+        builder.setMessage("Permission Denied, You cannot use local drive to see how many files you have saved with this app.");
+        builder.setPositiveButton("Setting", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                Uri uri = Uri.fromParts("package", context.getPackageName(), null);
+                intent.setData(uri);
+                context.startActivity(intent);
+            }
+        });
+        builder.show();
     }
 
 }
