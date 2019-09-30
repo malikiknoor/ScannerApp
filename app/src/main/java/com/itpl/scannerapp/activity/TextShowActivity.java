@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +41,7 @@ public class TextShowActivity extends AppCompatActivity {
 
     private TextView tv_result;
     private static final int REQUEST = 112;
+    private Button btnPDF;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,19 +49,30 @@ public class TextShowActivity extends AppCompatActivity {
         setContentView(R.layout.activity_text_show);
 
         tv_result = findViewById(R.id.tv_result);
+        btnPDF = findViewById(R.id.button2);
 
         tv_result.setText(getIntent().getStringExtra("result"));
+
+        if(tv_result.getText().toString().equalsIgnoreCase("No Text is Detected")){
+            btnPDF.setVisibility(View.GONE);
+        }else{
+            btnPDF.setVisibility(View.VISIBLE);
+        }
     }
 
     public void saveAsPdf(View view) {
-        if(isWriteStoragePermissionGranted()){
-            if(isReadStoragePermissionGranted()){
-                createandDisplayPdf();
-            }else{
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 2);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (isWriteStoragePermissionGranted()) {
+                if (isReadStoragePermissionGranted()) {
+                    createandDisplayPdf();
+                } else {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 2);
+                }
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
             }
         }else{
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            createandDisplayPdf();
         }
     }
 
@@ -131,6 +144,7 @@ public class TextShowActivity extends AppCompatActivity {
             //add paragraph to document
             doc.add(p1);
             Toast.makeText(this, "Done", Toast.LENGTH_SHORT).show();
+            finish();
         } catch (DocumentException de) {
             Log.e("PDFCreator", "DocumentException:" + de);
             Toast.makeText(this, "DocumentException:" + de.getMessage(), Toast.LENGTH_SHORT).show();

@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -93,14 +94,18 @@ public class HomeActivity extends AppCompatActivity {
     @SuppressLint("NewApi")
     @Override
     protected void onResume() {
-        if (isWriteStoragePermissionGranted()) {
-            if (isReadStoragePermissionGranted()) {
-                getFiles();
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (isWriteStoragePermissionGranted()) {
+                if (isReadStoragePermissionGranted()) {
+                    getFiles();
+                } else {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 2);
+                }
             } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 2);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
             }
-        } else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        }else{
+            getFiles();
         }
         super.onResume();
     }
